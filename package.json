@@ -1,0 +1,39 @@
+{
+  "name": "server",
+  "version": "0.0.1",
+  "scripts": {
+    "docker-debug": "docker-compose up",
+    "start": "node ./dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.50",
+    "http-server": "^0.11.1",
+    "nodemon": "^1.11.0",
+    "typescript": "^2.8.1",
+    "gulp": "*",
+    "gulp-js-minify": "*",
+    "gulp-jslint": "*",
+    "gulp-jsdoc3": "*",
+    "gulp-typescript": "*",
+    "gulp-clean": "*",
+    "gulp-minify-html": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-csso": "*",
+    "gulp-clean-css": "*",
+    "gulp-sass": "*",
+    "gulp-concat-css": "*",
+    "gulp-pug": "*",
+    "gulp-csslint": "*",
+    "gulp-reporter": "*",
+    "gulp-html-lint": "*",
+    "gulp-htmlhint": "*",
+    "gulp-inject": "*",
+    "gulp-image": "*",
+    "gulp-webserver": "*",
+    "gulp-sourcemaps": "*",
+    "pug": "*",
+    "del": "*",
+    "run-sequence": "*"
+  },
+  "main": "./dist/index.js"
+}
