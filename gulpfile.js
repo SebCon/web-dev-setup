@@ -212,10 +212,7 @@ function styleWatch() {
   return gulp.watch([
     paths.sass,
     paths.css
-  ], function() {
-    stylesSass();
-    stylesCss();
-  });
+  ], runSequence('styles-sass', 'styles-css', 'index'));
 }
 
 gulp.task('styles-sass', stylesSass);
@@ -262,7 +259,7 @@ function jsWatch() {
   return gulp.watch([
     paths.typescripts,
     paths.scripts
-  ], runSequence('js:typescript',  'js:jsLint', 'js:jsMinify'));
+  ], runSequence('js:typescript',  'js:jsLint', 'js:jsMinify', 'js-map', 'index'));
 }
 
 gulp.task('js:typescript', compileTypeScript);
@@ -271,7 +268,7 @@ gulp.task('js:jsMinify', jsMinify);
 
 gulp.task('js', ()=> {
   console.log('running js');
-  runSequence('js:typescript',  'js:jsLint', 'js:jsMinify');
+  runSequence('js:typescript',  'js:jsLint', 'js:jsMinify', 'js-map', 'index');
 });
 
 gulp.task('js:watch', jsWatch);
@@ -302,6 +299,8 @@ function jsMap() {
   .pipe(gulp.dest(paths.dist + 'maps'));
 }
 
+// watcher, see: js:watch
+
 gulp.task('js-map', jsMap);
 
 /***************************************************************************************************************
@@ -311,16 +310,23 @@ gulp.task('js-map', jsMap);
  **************************************************************************************************************/
 
 function createIndex() {
-  var target = gulp.src(paths.app + 'index.html');
-  // It's not necessary to read the files (will speed up things), we're only after their paths:
+  var target = gulp.src(paths.index);
   var sources = gulp.src([paths.scriptsOut + '**/*.js', paths.cssOut + '**/*.css'], {read: false});
  
   return target.pipe(inject(sources))
-    .pipe(gulp.dest(paths.dist + 'index.html'));
+    .pipe(gulp.dest(paths.indexOut));
+}
+
+function indexWatch() {
+  console.log('watch index');
+  return gulp.watch([
+    paths.index
+  ], createIndex);
 }
 
 
 gulp.task('index', createIndex);
+gulp.task('index:watch', indexWatch);
 
 
 /***************************************************************************************************************
@@ -347,10 +353,10 @@ gulp.task('webserver', server);
  * 
  **************************************************************************************************************/
 gulp.task('watch', function() {
-  runSequence('styles:watch', 'views:watch', 'pages:watch', 'images:watch', 'js:watch');
+  runSequence('styles:watch', 'views:watch', 'pages:watch', 'images:watch', 'js:watch', 'index:watch');
 });
 
 
 gulp.task('default', ['clean'], function () {
-    runSequence('styles-sass', 'styles-css', 'views', 'pages', 'js', 'js-doc', 'index', 'webserver', 'watch');
+    runSequence('styles-sass', 'styles-css', 'views', 'pages', 'js', 'js-doc', 'webserver', 'watch');
 });
