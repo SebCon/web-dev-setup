@@ -1,5 +1,5 @@
 # base image
-FROM node:alpine
+FROM ubuntu:14.04
 
 LABEL author="Sebastian Conrad"
 LABEL email="info@sebcon.de"
@@ -12,11 +12,15 @@ COPY . /usr/src/app
 WORKDIR /usr/src/app
 
 # install
+RUN cd /usr/src/app
+RUN apt-get update
+RUN apt-get -qq update
+RUN apt-get install -y nodejs npm
+RUN ap-get install nano
 RUN npm install
-RUN npm install typescript
 
 # port listener
 EXPOSE 9000
 
 #run
-CMD ["node"]
+CMD ["gulp"]
